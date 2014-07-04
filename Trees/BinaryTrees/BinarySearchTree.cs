@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Trees
 {
-    public class BinarySearchTree<T> 
+    public class BinarySearchTree<T>
     {
         private TreeNode<T> _rootNode;
 
@@ -35,7 +35,7 @@ namespace Trees
                 Stack<TreeNode<T>> localStack = new Stack<TreeNode<T>>();
                 while (true)
                 {
-                    if (IsLessThanOrEqualTo(data,currentNode.Value))
+                    if (IsLessThanOrEqualTo(data, currentNode.Value))
                     {
                         if (currentNode.LeftNode == null)
                         {
@@ -56,7 +56,7 @@ namespace Trees
                         else
                             currentNode = currentNode.RightNode;
                     }
-                    
+
                 }
             }
         }
@@ -105,7 +105,7 @@ namespace Trees
             while (true)
             {
                 valueQueue.Enqueue(currentNode.Value);
-                
+
                 if (currentNode.LeftNode != null)
                 {
                     //valueQueue.Enqueue(currentNode.LeftNode.Value);
@@ -122,9 +122,9 @@ namespace Trees
                     break;
 
                 currentNode = nodeQueue.Dequeue();
-              
+
             }
-            valueQueue.ToList().ForEach(x=>Console.Write(x));
+            valueQueue.ToList().ForEach(x => Console.Write(x));
 
         }
 
@@ -161,8 +161,161 @@ namespace Trees
             }
         }
 
+        public T MaxValue(TreeNode<T> node)
+        {
+            if (node == null)
+                return default(T);
+            else if (node.RightNode == null)
+            {
+                return node.Value;
+            }
+            else
+            {
+                return MaxValue(node.RightNode);
+            }
+        }
+
+        /// <summary>
+        /// Inorder Traversal of tree prints the numbers in ascending order
+        ///              4
+        ///           /     \
+        ///          2       5 
+        ///         / \
+        ///        1   3
+        /// Result: 1,2,3,4,5
+        /// </summary>
+        /// <param name="node"></param>
+        public void InOrderTraversalPrint(TreeNode<T> node)
+        {
+            if (node == null)
+                return;
+
+            InOrderTraversalPrint(node.LeftNode);
+            Console.Write(node.Value + ", ");
+            InOrderTraversalPrint(node.RightNode);
+        }
+
+        /// <summary>
+        /// Inorder Traversal of tree prints the numbers in ascending order
+        ///              4
+        ///           /     \
+        ///          2       5 
+        ///         / \
+        ///        1   3
+        /// Result: 4,2,1,3,5
+        /// The sequence is as follows
+        /// visit Node
+        /// preorder(left_child)
+        /// preorder(right_child)
+        /// </summary>
+        /// <param name="node"></param>
+        public void PreOrderTraversalPrint(TreeNode<T> node)
+        {
+            if (node == null)
+                return;
+
+            Console.Write(node.Value + ", ");
+            PreOrderTraversalPrint(node.LeftNode);
+            PreOrderTraversalPrint(node.RightNode);
+        }
+
+        /// <summary>
+        /// PostOrder Traversal of tree: traverse left, traverse right, visit
+        ///              4
+        ///           /     \
+        ///          2       5 
+        ///         / \
+        ///        1   3
+        /// Result: 1,3,2,5,4
+        /// Bottom up Traversal
+        /// </summary>
+        /// <param name="node"></param>
+        public void PostOrderTraversalPrint(TreeNode<T> node)
+        {
+            if (node == null)
+                return;
+
+            PostOrderTraversalPrint(node.LeftNode);
+            PostOrderTraversalPrint(node.RightNode);
+            Console.Write(node.Value + ", ");
+        }
+
+
+        Queue<TreeNode<T>> levelOrderTraversalQueue = new Queue<TreeNode<T>>();
+        /// <summary>
+        /// Level Order Traversal:Visits the tree level by level
+        ///              4
+        ///           /     \
+        ///          2       5 
+        ///         / \
+        ///        1   3
+        /// Result: 4,2,5,1,3
+        /// TopDown Traversal
+        /// </summary>
+        /// <param name="node"></param>
+        public void LevelOrderTraversalTopDownPrint(TreeNode<T> node)
+        {
+            if (node == null)
+                return;
+
+            levelOrderTraversalQueue.Enqueue(node);
+
+            while (levelOrderTraversalQueue.Count != 0)
+            {
+                TreeNode<T> currentNode = levelOrderTraversalQueue.Dequeue();
+                Console.Write(currentNode.Value);
+                
+                if (currentNode.LeftNode != null) 
+                    levelOrderTraversalQueue.Enqueue(currentNode.LeftNode);
+
+                if (currentNode.RightNode != null) 
+                    levelOrderTraversalQueue.Enqueue(currentNode.RightNode);
+            }
+            
+        }
+
+
+        Queue<TreeNode<T>> levelTraversalBottomUpQueue = new Queue<TreeNode<T>>();
+        Stack<TreeNode<T>> levelTraversalBottomUpStack = new Stack<TreeNode<T>>();
+        /// <summary>
+        /// Level Order Traversal:Visits the tree level by level
+        ///              4
+        ///           /     \
+        ///          2       5 
+        ///         / \
+        ///        1   3
+        /// Result: 1,3,2,5,4
+        /// Bottom up Traversal
+        /// </summary>
+        /// <param name="node"></param>
+        public void LevelOrderTraversalBottomUpPrint(TreeNode<T> node)
+        {
+            if (node == null)
+                return;
+
+            levelTraversalBottomUpQueue.Enqueue(node);
+
+            while (levelTraversalBottomUpQueue.Count != 0)
+            {
+                TreeNode<T> currentNode = levelTraversalBottomUpQueue.Dequeue();
+                levelTraversalBottomUpStack.Push(currentNode);
+
+                if (currentNode.RightNode != null)//changed the order
+                    levelTraversalBottomUpQueue.Enqueue(currentNode.RightNode);
+
+                if (currentNode.LeftNode != null)//changed the order
+                    levelTraversalBottomUpQueue.Enqueue(currentNode.LeftNode);
+            }
+
+            while (levelTraversalBottomUpStack.Count != 0)
+            {
+                Console.Write(levelTraversalBottomUpStack.Pop().Value);
+            }
+        }
+
+
         #region Privates
-        private bool IsLessThanOrEqualTo<T>(T data,T currentNodeValue)
+        private bool IsLessThanOrEqualTo<T>(T data, T currentNodeValue)
         {
             return Comparer<T>.Default.Compare(data, currentNodeValue) <= 0;
         }
@@ -179,6 +332,6 @@ namespace Trees
 
         #endregion Privates
 
-      
+
     }
 }
