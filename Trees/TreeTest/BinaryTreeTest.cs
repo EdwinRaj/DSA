@@ -134,6 +134,23 @@ namespace TreeTest
             Console.WriteLine();
         }
 
+        [TestMethod]
+        public void HasPathSumTest()
+        {
+            BinarySearchTree<int> bst = ConstructTree(6, 4, 5, 3);
+            bool result = bst.HasPathSum(bst.RootNode, 13);
+            Assert.AreEqual(result, true);
+            result = bst.HasPathSum(bst.RootNode, 10);
+            Assert.AreEqual(result, false);
+        }
+
+        [TestMethod]
+        public void PrintAllRootPath()
+        {
+            BinarySearchTree<int> bst = ConstructTree(4,2,5,1,3);
+            bst.PrintAllRootToLeafPath(bst.RootNode);
+        }
+
         private static BinarySearchTree<int> ConstructTree()
         {
             string fileName = "BinarySearchTreeBasic.txt";

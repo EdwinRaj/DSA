@@ -264,14 +264,14 @@ namespace Trees
             {
                 TreeNode<T> currentNode = levelOrderTraversalQueue.Dequeue();
                 Console.Write(currentNode.Value);
-                
-                if (currentNode.LeftNode != null) 
+
+                if (currentNode.LeftNode != null)
                     levelOrderTraversalQueue.Enqueue(currentNode.LeftNode);
 
-                if (currentNode.RightNode != null) 
+                if (currentNode.RightNode != null)
                     levelOrderTraversalQueue.Enqueue(currentNode.RightNode);
             }
-            
+
         }
 
 
@@ -313,6 +313,65 @@ namespace Trees
             }
         }
 
+
+        Stack<int> hasPathSumStack = new Stack<int>();
+        /// <summary>
+        /// If the path from root to leaf, matches the input sum
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="sum"></param>
+        /// <returns></returns>
+        public bool HasPathSum(TreeNode<int> node, int sum)
+        {
+            //The idea is to do preorder traversal and save the values in the stack
+            if (node == null)
+                return (sum == 0);
+            else
+            {
+                sum = sum - node.Value;
+                return (HasPathSum(node.LeftNode, sum) || HasPathSum(node.RightNode, sum));
+            }
+        }
+
+        List<T> rootToLeafList = new List<T>(); 
+        /* 
+         Given a binary tree, print out all of its root-to-leaf 
+         paths, one per line. Uses a recursive helper to do the work. 
+        */
+        public void PrintAllRootToLeafPath(TreeNode<T> node)
+        {
+            //if (node!= null && (node.LeftNode == null && node.RightNode == null))
+            //{
+            //    rootToLeafList.Add(node.Value);
+            //    Console.WriteLine(string.Join(",", rootToLeafList.ToArray()));
+            //    rootToLeafList.Remove(node.Value);
+            //}
+            //else
+            //{
+            //    rootToLeafList.Add(node.Value);
+            //    PrintAllRootToLeafPath(node.LeftNode);
+            //    PrintAllRootToLeafPath(node.RightNode);
+            //}
+
+            PrintAllRootToLeafPathHelper(node, new List<T>());
+        }
+
+        private void PrintAllRootToLeafPathHelper(TreeNode<T> node, List<T> path)
+        {
+            if (node == null)
+                return;
+
+            path.Add(node.Value);
+
+            if (node.LeftNode == null && node.RightNode == null)
+            {
+                Console.WriteLine(string.Join(",", path.ToArray()));
+                path.Remove(node.Value);
+            }
+            PrintAllRootToLeafPathHelper(node.LeftNode, path);
+            PrintAllRootToLeafPathHelper(node.RightNode, path);
+            path.Remove(node.Value);
+        }
 
         #region Privates
         private bool IsLessThanOrEqualTo<T>(T data, T currentNodeValue)
