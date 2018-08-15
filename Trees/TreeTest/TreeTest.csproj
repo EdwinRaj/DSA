@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BinaryTreeTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UdemyBinaryTreeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BinarySearchTreeBasic.txt">
